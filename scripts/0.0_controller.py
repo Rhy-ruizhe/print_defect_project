@@ -40,8 +40,8 @@ def run_speed_control(speed_script: Path, script_dir: Path) -> None:
 def main() -> None:
     try:
         script_dir = Path(__file__).resolve().parent
-        trigger_script = script_dir / "3.2_test_classifier.py"
-        speed_script = script_dir / "3.3_speed_test.py"
+        trigger_script = script_dir / "1.1_classifier.py"
+        speed_script = script_dir / "2.1_single_parameter.py"
 
         if not trigger_script.exists():
             print(f"Classifier script not found: {trigger_script}")

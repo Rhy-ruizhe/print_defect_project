@@ -310,5 +310,5 @@ if __name__ == "__main__":
     try:
         main()
     except Exception as exc:
-        print(f"Unhandled error in 3.4_dual_parameter.py: {exc}")
+        print(f"Unhandled error in 2.2_dual_parameter.py: {exc}")
         input("Press Enter to exit...")

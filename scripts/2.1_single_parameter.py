@@ -196,5 +196,5 @@ if __name__ == "__main__":
     try:
         main()
     except Exception as exc:
-        print(f"Unhandled error in 3.3_speed_test.py: {exc}")
+        print(f"Unhandled error in 2.1_single_parameter.py: {exc}")
         input("Press Enter to exit...")

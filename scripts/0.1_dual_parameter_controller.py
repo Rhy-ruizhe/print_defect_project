@@ -44,8 +44,8 @@ def run_dual_parameter_control(
 def main() -> None:
     try:
         script_dir = Path(__file__).resolve().parent
-        trigger_script = script_dir / "3.2_test_classifier.py"
-        dual_parameter_script = script_dir / "3.4_dual_parameter.py"
+        trigger_script = script_dir / "1.1_classifier.py"
+        dual_parameter_script = script_dir / "2.2_dual_parameter.py"
 
         if not trigger_script.exists():
             print(f"Classifier script not found: {trigger_script}")
