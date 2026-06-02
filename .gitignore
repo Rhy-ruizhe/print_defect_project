@@ -24,7 +24,6 @@ Thumbs.db
 *.cache
 
 # Training outputs and generated experiment files
-runs/
 results/
 
 # Local datasets
@@ -45,3 +44,7 @@ data/*
 # Track selected trained models in the repository
 !models/
 !models/**
+
+# Track YOLO training and inference runs
+!runs/
+!runs/**
