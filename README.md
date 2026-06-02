@@ -4,7 +4,7 @@ This repository contains the code, trained models, YOLO run outputs, and dataset
 
 The project combines:
 
-- YOLO-based object localization
+- YOLO-based object detection
 - Image classification for defect / no-defect prediction
 - OCR-based wind-speed reading
 - Single-parameter feedrate control
