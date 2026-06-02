@@ -37,5 +37,6 @@ data/
 *.tflite
 *.pb
 
-# Large model directory by default
-models/
+# Track selected trained models in the repository
+!models/
+!models/**
