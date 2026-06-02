@@ -1,53 +1,43 @@
-# Print Defect Project
+# Print Defect Detection and Parameter Control
 
-This repository contains Python scripts for print defect detection, YOLO training/inference, classifier training/testing, OCR-based wind-speed reading, and Raspberry Pi image receiving/control workflows.
+This repository contains the code, trained models, YOLO run outputs, and datasets used for print defect detection and parameter-control experiments.
 
-## Repository Contents
+The project combines:
 
-```text
-scripts/                  Source scripts
-scripts/util_ocr_7seg/     7-segment OCR utilities
-.gitignore                 Keeps local data, models, outputs, and virtualenv files out of Git
-requirements.txt           Python dependencies
-```
+- YOLO-based object localization
+- Image classification for defect / no-defect prediction
+- OCR-based wind-speed reading
+- Single-parameter feedrate control
+- Dual-parameter feedrate / flowrate control
+- Raspberry Pi image receiving workflows
 
-Large local assets are intentionally not committed to Git:
-
-```text
-data/                      Training and validation datasets
-models/                    Trained classifier/model weights
-runs/                      YOLO run outputs
-results/                   Training results and metrics
-*.pt, *.pth, *.onnx         Model weight/export files
-```
-
-## External Assets
-
-Download the dataset and trained models from the project storage location, then place them in the project root using this structure:
+## Repository Structure
 
 ```text
+scripts/
+  0.0_controller.py                 Main controller for single-parameter control
+  0.1_dual_parameter_controller.py  Main controller for dual-parameter control
+  1.1_classifier.py                 Defect detection pipeline
+  2.1_single_parameter.py           Single-parameter control logic
+  2.2_dual_parameter.py             Dual-parameter control logic
+  4.1_rasp_server.py                Raspberry Pi image receiving server
+  util_ocr_7seg/                    Seven-segment OCR utilities
+
 data/
-  yolo_dataset/
-    data.yaml
-    images/
-    labels/
-  cls_dataset/
-    train/
-    val/
+  cls_dataset/                      Classification dataset
+  yolo_dataset/                     YOLO dataset
 
 models/
-  defect_classifier.pth
-  defect_dinov3_classifier.pth
+  defect_classifier.pth             Trained defect classifier
+  defect_dinov3_classifier.pth      Trained DINOv3 classifier
 
-yolov8n.pt
+runs/
+  detect/results/yolo_print_object3/
+    weights/best.pt                 Trained YOLO model used by 1.1_classifier.py
+    weights/last.pt                 Last YOLO training checkpoint
 ```
 
-Asset download links:
-
-```text
-Dataset: TODO
-Model weights: TODO
-```
+Large binary files such as images and model weights are tracked with Git LFS.
 
 ## Setup
 
@@ -64,7 +54,85 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
-## Common Commands
+If you clone this repository on a new machine, make sure Git LFS is installed before cloning or pulling the dataset/model files:
+
+```powershell
+git lfs install
+git lfs pull
+```
+
+## Defect Detection Pipeline
+
+The main detection script is:
+
+```powershell
+python scripts\1.1_classifier.py
+```
+
+It uses two trained models:
+
+```text
+runs/detect/results/yolo_print_object3/weights/best.pt
+models/defect_classifier.pth
+```
+
+The YOLO model first localizes the printed object region. The classifier then predicts whether the cropped region is `defect` or `no_defect`.
+
+The file `yolov8n.pt` is only the original YOLOv8 nano pretrained starting point. It is useful for training YOLO, but `1.1_classifier.py` uses the trained `best.pt` checkpoint instead.
+
+## Controller Scripts
+
+There are two top-level controller scripts. Both repeatedly run `1.1_classifier.py` to check the latest Raspberry Pi image. When the classifier predicts `defect`, the controller starts a parameter-control script.
+
+### Single-Parameter Controller
+
+Run:
+
+```powershell
+python scripts\0.0_controller.py
+```
+
+This controller:
+
+- checks the latest image every 10 seconds
+- runs `scripts/1.1_classifier.py`
+- waits if no defect is detected
+- starts `scripts/2.1_single_parameter.py` when a defect is detected
+
+Use this mode when the experiment only adjusts one process parameter, currently the feedrate-related control path.
+
+### Dual-Parameter Controller
+
+Run:
+
+```powershell
+python scripts\0.1_dual_parameter_controller.py
+```
+
+This controller:
+
+- checks the latest image every 5 seconds
+- runs `scripts/1.1_classifier.py`
+- waits if no defect is detected
+- starts `scripts/2.2_dual_parameter.py` when a defect is detected
+
+Use this mode when the experiment adjusts two process parameters together, currently the feedrate / flowrate control path.
+
+### Main Difference
+
+```text
+0.0_controller.py
+  defect detected -> 2.1_single_parameter.py
+  one controlled parameter
+  10-second check interval
+
+0.1_dual_parameter_controller.py
+  defect detected -> 2.2_dual_parameter.py
+  two controlled parameters
+  5-second check interval
+```
+
+## Training and Testing
 
 Train YOLO:
 
@@ -78,24 +146,30 @@ Test YOLO:
 python scripts\test_yolo.py
 ```
 
-Train classifier:
+Train the classifier:
 
 ```powershell
 python scripts\train_classifier.py
 ```
 
-Run defect controller:
+Test the classifier:
 
 ```powershell
-python scripts\0.0_controller.py
+python scripts\test_classifier.py
 ```
 
-Run dual-parameter controller:
+## Raspberry Pi Image Server
+
+The Raspberry Pi receiving workflow is implemented in:
 
 ```powershell
-python scripts\0.1_dual_parameter_controller.py
+python scripts\4.1_rasp_server.py
 ```
+
+This script receives image uploads, stores the latest image, and provides the image source used by the detection/controller workflow.
 
 ## Notes
 
-Keep large datasets, generated outputs, and model weights in external storage such as Hugging Face, Google Drive, OneDrive, Kaggle, or a lab server. This keeps the GitHub repository small and easy to clone.
+- `venv/`, cache files, and temporary files are ignored by Git.
+- `data/`, `models/`, and `runs/` are included because they are required for reproducibility.
+- Git LFS is required for large images and model weights.
