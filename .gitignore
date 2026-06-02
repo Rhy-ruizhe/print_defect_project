@@ -21,13 +21,18 @@ Thumbs.db
 *.log
 *.tmp
 *.temp
+*.cache
 
 # Training outputs and generated experiment files
 runs/
 results/
 
 # Local datasets
-data/
+data/*
+!data/cls_dataset/
+!data/cls_dataset/**
+!data/yolo_dataset/
+!data/yolo_dataset/**
 
 # Model weights and exported model files
 *.pt
