@@ -1,7 +1,7 @@
 from ultralytics import YOLO
 
 MODEL_PATH = "runs/detect/results/yolo_print_object3/weights/best.pt"
-IMAGE_PATH = "data/test_images/img001.jpg"   # 自己的某张图
+IMAGE_PATH = "data/validate/cam1_20260519_113058.jpg"   # 自己的某张图
 
 
 def main():
