@@ -2,6 +2,9 @@
 
 This repository contains the code, trained models, YOLO run outputs, and datasets used for print defect detection and parameter-control experiments.
 
+Video Link: https://www.youtube.com/watch?v=1jKyEbYnkQ4&feature=youtu.be
+The video shows how the travel speed is changed during printing
+
 The project combines:
 
 - YOLO-based object detection
