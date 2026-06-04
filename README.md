@@ -15,6 +15,8 @@ The project combines:
 - Raspberry Pi image receiving workflows
 
 ## Repository Structure
+<img width="7144" height="6858" alt="graduation  thesis - Frame 27" src="https://github.com/user-attachments/assets/2c80a95e-f78b-48da-86f6-5229f0ca69a4" />
+
 
 ```text
 scripts/
@@ -169,7 +171,7 @@ The Raspberry Pi receiving workflow is implemented in:
 python scripts\4.1_rasp_server.py
 ```
 
-This script receives image uploads, stores the latest image, and provides the image source used by the detection/controller workflow.
+This script receives image captured, stores the latest image, and provides the image source used by the detection/controller workflow.
 
 ## Notes
 
