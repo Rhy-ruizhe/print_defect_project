@@ -2,8 +2,11 @@
 
 This repository contains the code, trained models, YOLO run outputs, and datasets used for print defect detection and parameter-control experiments.
 
-Video Link: https://www.youtube.com/watch?v=1jKyEbYnkQ4&feature=youtu.be
+Single-Parameter Adjustment: https://youtu.be/-bbHQhmS76I
 The video shows how the travel speed is changed during printing
+
+Dual-Parameter Adjustment: https://youtu.be/FCghLTBxQnE
+The video shows how the travel speed and extrusion rate are changed during printing
 
 The project combines:
 
